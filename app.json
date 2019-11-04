@@ -7,6 +7,14 @@
     "sample",
     "example"
   ],
+  "addons":[
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "9.5"
+      }
+    }
+  ],
   "website": "http://github.com/heroku/go-getting-started",
   "repository": "http://github.com/heroku/go-getting-started"
 }
