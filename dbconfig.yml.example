@@ -1,0 +1,5 @@
+development:
+    dialect: mysql
+    datasource: root:olid@tcp(127.0.0.1:3306)/go_test?parseTime=true
+    dir: migrations
+    table: migrations

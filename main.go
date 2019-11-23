@@ -1,29 +1,40 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
+	"fmt"
 
-	"github.com/gin-gonic/gin"
-	_ "github.com/heroku/x/hmetrics/onload"
+	"github.com/mmuflih/go-di-arch/container"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/mmuflih/go-di-arch/app"
+	"github.com/mmuflih/go-httplib/httplib"
+	"go.uber.org/dig"
 )
 
-func main() {
-	port := os.Getenv("PORT")
+var _ = dig.Name
 
-	if port == "" {
-		log.Fatal("$PORT must be set")
+func main() {
+	myrole := make(map[string][]string)
+
+	myrole[app.ADMIN] = []string{app.ADMIN}
+	myrole[app.LEADER] = []string{app.LEADER, app.ADMIN}
+	myrole[app.USER] = []string{app.USER, app.LEADER, app.ADMIN}
+
+	httplib.InitJWTMiddlewareWithRole([]byte("Go-DI-arch"), jwt.SigningMethodHS512, myrole)
+
+	c := container.BuildContainer()
+
+	if err := c.Invoke(container.InvokeRoute); err != nil {
+		panic(err)
 	}
 
-	router := gin.New()
-	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/*.tmpl.html")
-	router.Static("/static", "static")
+	if err := c.Provide(container.NewRoute); err != nil {
+		panic(err)
+	}
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", nil)
-	})
-
-	router.Run(":" + port)
+	if err := c.Invoke(func(s *container.ServerRoute) {
+		s.Run()
+	}); err != nil {
+		fmt.Println(err)
+	}
 }

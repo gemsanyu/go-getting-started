@@ -1,6 +1,7 @@
 GO_BUILD_ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 DOCKER_BUILD=$(shell pwd)/.docker_build
 DOCKER_CMD=$(DOCKER_BUILD)/go-getting-started
+DATABASE_URL=$(heroku config:get DATABASE_URL -a floating-shelf-73554)
 
 $(DOCKER_CMD): clean
 	mkdir -p $(DOCKER_BUILD)

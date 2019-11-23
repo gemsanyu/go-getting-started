@@ -1,3 +1,11 @@
 .env
 .docker_build/
 bin/
+/env.json
+/dbconfig.yml
+images/*
+.history
+tags
+glide.lock
+go-di-arch
+tmp/*
