@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/mmuflih/go-di-arch/domain/model"
+	"github.com/heroku/go-getting-started/domain/model"
 )
 
 /**
@@ -18,7 +18,7 @@ type UserRepository interface {
 	Save(u *model.User, tx *sql.Tx) error
 	Update(u *model.User, tx *sql.Tx) error
 	Find(id string) (error, *model.User)
-	FindByEmail(email string) (error, *model.User)
+	FindByUsername(email string) (error, *model.User)
 	FindAll(q string, page, size int) (error, []*model.User)
 	FindAllCount(q string) int
 }

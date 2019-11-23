@@ -1,8 +1,9 @@
 package provider
 
 import (
-	"github.com/mmuflih/go-di-arch/context/ping"
-	"github.com/mmuflih/go-di-arch/context/user"
+	"github.com/heroku/go-getting-started/context/ping"
+	"github.com/heroku/go-getting-started/context/profile"
+	"github.com/heroku/go-getting-started/context/user"
 	"go.uber.org/dig"
 )
 
@@ -28,6 +29,28 @@ func BuildUseCaseProvider(c *dig.Container) *dig.Container {
 		panic(err)
 	}
 	if err := c.Provide(user.NewListUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewGetTokenUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewGetAuthUserUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewVoidUsecase); err != nil {
+		panic(err)
+	}
+
+	if err := c.Provide(profile.NewAddUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewGetUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewEditUsecase); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewUploadAvatarUsecase); err != nil {
 		panic(err)
 	}
 

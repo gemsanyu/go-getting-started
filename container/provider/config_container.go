@@ -5,7 +5,7 @@ import (
 	"github.com/globalsign/mgo"
 	"github.com/gorilla/mux"
 	"github.com/mmuflih/envgo/conf"
-	"github.com/mmuflih/go-di-arch/config"
+	"github.com/heroku/go-getting-started/config"
 	"github.com/mmuflih/go-httplib/httplib"
 	"go.uber.org/dig"
 	"net/http"

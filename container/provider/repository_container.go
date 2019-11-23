@@ -1,7 +1,8 @@
 package provider
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/repository/mysql"
+	"github.com/heroku/go-getting-started/domain/repository/fileserver"
+	"github.com/heroku/go-getting-started/domain/repository/mysql"
 	"go.uber.org/dig"
 )
 
@@ -14,6 +15,12 @@ import (
 
 func BuildRepositoryProvider(c *dig.Container) *dig.Container {
 	if err := c.Provide(mysql.NewUserRepo); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(fileserver.NewPictureRepo); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(mysql.NewProfileRepo); err != nil {
 		panic(err)
 	}
 	return c

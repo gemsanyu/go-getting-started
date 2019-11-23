@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/model"
-	"github.com/mmuflih/go-di-arch/lib"
+	"github.com/heroku/go-getting-started/domain/model"
+	"github.com/mmuflih/datelib"
 )
 
 /**
@@ -14,9 +14,8 @@ import (
 
 type listResponse struct {
 	ID        string `json:"id"`
-	Email     string `json:"email"`
+	Username  string `json:"username"`
 	Name      string `json:"name"`
-	Phone     string `json:"phone"`
 	Password  string `json:"-"`
 	Role      string `json:"role"`
 	LastLogin string `json:"last_login"`
@@ -25,8 +24,12 @@ type listResponse struct {
 }
 
 func newListResponse(u *model.User) listResponse {
+	lastLogin := ""
+	if u.LastLogin.Valid {
+		lastLogin = u.LastLogin.Time.Format(datelib.ISO1)
+	}
 	return listResponse{
-		u.ID, u.Email, u.Name, u.Phone, u.Password, u.Role, u.LastLogin.Format(lib.YMDHMS),
-		u.CreatedAt.Format(lib.YMDHMS), u.UpdatedAt.Format(lib.YMDHMS),
+		u.ID, u.Username, u.Name, u.Password, u.Role, lastLogin,
+		u.CreatedAt.Format(datelib.ISO1), u.UpdatedAt.Format(datelib.ISO1),
 	}
 }

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/repository"
+	"github.com/heroku/go-getting-started/domain/repository"
 	"github.com/pkg/errors"
 )
 
@@ -13,25 +13,22 @@ import (
 **/
 
 type EditUsecase interface {
-	Edit(EditRequest) (error, EditResponse)
+	Edit(EditRequest) (error, interface{})
 }
 
 type EditRequest interface {
 	GetID() string
 	GetName() string
-	GetEmail() string
+	GetUsername() string
 	GetPassword() string
 	GetRole() string
-	GetPhone() string
 }
-
-type EditResponse interface{}
 
 type editUsecase struct {
 	repo repository.UserRepository
 }
 
-func (au editUsecase) Edit(req EditRequest) (error, EditResponse) {
+func (au editUsecase) Edit(req EditRequest) (error, interface{}) {
 	err, u := au.repo.Find(req.GetID())
 	if err != nil {
 		return errors.New("User not found"), nil
@@ -40,8 +37,7 @@ func (au editUsecase) Edit(req EditRequest) (error, EditResponse) {
 	tx, _ := au.repo.DBConn().Begin()
 
 	u.Name = req.GetName()
-	u.Phone = req.GetPhone()
-	u.Email = req.GetEmail()
+	u.Username = req.GetUsername()
 	u.Password = req.GetPassword()
 	u.Role = req.GetRole()
 

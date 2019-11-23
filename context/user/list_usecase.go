@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/repository"
+	"github.com/heroku/go-getting-started/domain/repository"
 	"github.com/mmuflih/go-httplib/httplib"
 )
 

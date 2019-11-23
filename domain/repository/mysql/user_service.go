@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/mmuflih/go-di-arch/domain/model"
+	"github.com/heroku/go-getting-started/domain/model"
 
-	"github.com/mmuflih/go-di-arch/domain/repository"
+	"github.com/heroku/go-getting-started/domain/repository"
 )
 
 /**
@@ -25,13 +25,13 @@ func (us userService) DBConn() *sql.DB {
 }
 
 func (us userService) Save(u *model.User, tx *sql.Tx) error {
-	query := "INSERT INTO users (id, email, name, phone, password, role, last_login) " +
-		" VALUES (?, ?, ?, ?, ?, ?, ?) "
+	query := "INSERT INTO users (id, username, name, password, role, last_login) " +
+		" VALUES (?, ?, ?, ?, ?, ?) "
 	st, err := tx.Prepare(query)
 	if err != nil {
 		return err
 	}
-	_, err = st.Exec(u.ID, u.Email, u.Name, u.Phone, u.Password, u.Role, u.LastLogin)
+	_, err = st.Exec(u.ID, u.Username, u.Name, u.Password, u.Role, u.LastLogin)
 	if err != nil {
 		return err
 	}
@@ -41,17 +41,17 @@ func (us userService) Save(u *model.User, tx *sql.Tx) error {
 
 func (us userService) Update(u *model.User, tx *sql.Tx) error {
 	query := "UPDATE users " +
-		" SET email = ?, " +
+		" SET username = ?, " +
 		"	name = ?, " +
-		"	phone = ?, " +
 		" 	password = ?, " +
 		"   role = ? " +
+		"	deleted_at = ?" +
 		" WHERE id = ?"
 	st, err := tx.Prepare(query)
 	if err != nil {
 		return err
 	}
-	_, err = st.Exec(u.Email, u.Name, u.Phone, u.Password, u.Role, u.ID)
+	_, err = st.Exec(u.Username, u.Name, u.Password, u.Role, u.DeletedAt, u.ID)
 	if err != nil {
 		return err
 	}
@@ -61,13 +61,13 @@ func (us userService) Update(u *model.User, tx *sql.Tx) error {
 }
 
 func (us userService) Find(id string) (error, *model.User) {
-	query := "SELECT id, name, email, phone, password, role, last_login, " +
+	query := "SELECT id, name, username, password, role, last_login, " +
 		" created_at, updated_at " +
 		"	FROM users " +
 		" WHERE id = ?"
 	row := us.db.QueryRow(query, id)
 	u := new(model.User)
-	err := row.Scan(&u.ID, &u.Name, &u.Email, &u.Phone, &u.Password, &u.Role,
+	err := row.Scan(&u.ID, &u.Name, &u.Username, &u.Password, &u.Role,
 		&u.LastLogin, &u.CreatedAt, &u.UpdatedAt)
 	if err != nil {
 		return err, nil
@@ -75,14 +75,14 @@ func (us userService) Find(id string) (error, *model.User) {
 	return nil, u
 }
 
-func (us userService) FindByEmail(email string) (error, *model.User) {
-	query := "SELECT id, name, email, phone, password, role, last_login, " +
+func (us userService) FindByUsername(username string) (error, *model.User) {
+	query := "SELECT id, name, username, password, role, last_login, " +
 		" created_at, updated_at " +
 		"	FROM users " +
-		" WHERE email = ?"
-	row := us.db.QueryRow(query, email)
+		" WHERE username = ?"
+	row := us.db.QueryRow(query, username)
 	u := new(model.User)
-	err := row.Scan(&u.ID, &u.Name, &u.Email, &u.Phone, &u.Password, &u.Role,
+	err := row.Scan(&u.ID, &u.Name, &u.Username, &u.Password, &u.Role,
 		&u.LastLogin, &u.CreatedAt, &u.UpdatedAt)
 	if err != nil {
 		return err, nil
@@ -91,12 +91,11 @@ func (us userService) FindByEmail(email string) (error, *model.User) {
 }
 
 func (us userService) FindAll(q string, page, size int) (error, []*model.User) {
-	query := "SELECT id, name, email, phone, password, role, last_login, " +
+	query := "SELECT id, name, username, password, role, last_login, " +
 		" created_at, updated_at " +
 		"	FROM users " +
 		" WHERE (name LIKE '%" + q + "%' " +
-		" 	OR email LIKE '%" + q + "%'" +
-		" 	OR phone LIKE '%" + q + "%') " +
+		" 	OR username LIKE '%" + q + "%') " +
 		" LIMIT ? OFFSET ?"
 	rows, err := us.db.Query(query, size, (page-1)*size)
 	if err != nil {
@@ -105,7 +104,7 @@ func (us userService) FindAll(q string, page, size int) (error, []*model.User) {
 	var users []*model.User
 	for rows.Next() {
 		u := new(model.User)
-		err := rows.Scan(&u.ID, &u.Name, &u.Email, &u.Phone, &u.Password, &u.Role,
+		err := rows.Scan(&u.ID, &u.Name, &u.Username, &u.Password, &u.Role,
 			&u.LastLogin, &u.CreatedAt, &u.UpdatedAt)
 		if err != nil {
 			fmt.Println(err)
@@ -120,8 +119,7 @@ func (us userService) FindAllCount(q string) int {
 	query := "SELECT count(id) " +
 		"	FROM users " +
 		" WHERE (name LIKE '%" + q + "%' " +
-		" 	OR email LIKE '%" + q + "%'" +
-		" 	OR phone LIKE '%" + q + "%')"
+		" 	OR username LIKE '%" + q + "%') "
 	row := us.db.QueryRow(query)
 	c := 0
 	err := row.Scan(&c)

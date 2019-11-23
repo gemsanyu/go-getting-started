@@ -2,8 +2,7 @@ package config
 
 import (
 	"database/sql"
-	"github.com/mmuflih/go-di-arch/app"
-
+	"github.com/heroku/go-getting-started/app"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/mmuflih/envgo/conf"
 )

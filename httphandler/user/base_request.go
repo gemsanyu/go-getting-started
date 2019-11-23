@@ -1,6 +1,8 @@
 package user
 
-import "github.com/mmuflih/go-di-arch/lib"
+import (
+	"github.com/heroku/go-getting-started/loclib"
+)
 
 /**
  * Created by Muhammad Muflih Kholidin
@@ -12,9 +14,8 @@ import "github.com/mmuflih/go-di-arch/lib"
 type baseRequest struct {
 	ID       string
 	Name     string `json:"name"`
-	Email    string `json:"email"`
+	Username string `json:"username"`
 	Password string `json:"password"`
-	Phone    string `json:"phone"`
 	Role     string `json:"role"`
 }
 
@@ -26,16 +27,12 @@ func (br baseRequest) GetName() string {
 	return br.Name
 }
 
-func (br baseRequest) GetEmail() string {
-	return br.Email
+func (br baseRequest) GetUsername() string {
+	return br.Username
 }
 
 func (br baseRequest) GetPassword() string {
-	return lib.GeneratePassword(br.Password)
-}
-
-func (br baseRequest) GetPhone() string {
-	return br.Phone
+	return loclib.GeneratePassword(br.Password)
 }
 
 func (br baseRequest) GetRole() string {

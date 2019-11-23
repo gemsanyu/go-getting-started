@@ -1,7 +1,7 @@
 package ping
 
 import (
-	"github.com/mmuflih/go-di-arch/context/ping"
+	"github.com/heroku/go-getting-started/context/ping"
 	"net/http"
 
 	"github.com/mmuflih/go-httplib/httplib"

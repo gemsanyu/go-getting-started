@@ -3,7 +3,7 @@ package user
 import (
 	"net/http"
 
-	"github.com/mmuflih/go-di-arch/context/user"
+	"github.com/heroku/go-getting-started/context/user"
 	"github.com/mmuflih/go-httplib/httplib"
 )
 

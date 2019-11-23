@@ -1,9 +1,10 @@
 package provider
 
 import (
-	"github.com/mmuflih/go-di-arch/httphandler/extra"
-	"github.com/mmuflih/go-di-arch/httphandler/ping"
-	"github.com/mmuflih/go-di-arch/httphandler/user"
+	"github.com/heroku/go-getting-started/httphandler/extra"
+	"github.com/heroku/go-getting-started/httphandler/ping"
+	"github.com/heroku/go-getting-started/httphandler/profile"
+	"github.com/heroku/go-getting-started/httphandler/user"
 	"go.uber.org/dig"
 )
 
@@ -33,6 +34,28 @@ func BuildHandlerProvider(c *dig.Container) *dig.Container {
 		panic(err)
 	}
 	if err := c.Provide(user.NewListHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewGetTokenHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewGetMyHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(user.NewVoidHandler); err != nil {
+		panic(err)
+	}
+
+	if err := c.Provide(profile.NewAddHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewEditHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewGetHandler); err != nil {
+		panic(err)
+	}
+	if err := c.Provide(profile.NewUploadAvatarHandler); err != nil {
 		panic(err)
 	}
 

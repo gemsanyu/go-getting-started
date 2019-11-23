@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/repository"
+	"github.com/heroku/go-getting-started/domain/repository"
 )
 
 /**
@@ -12,16 +12,14 @@ import (
 **/
 
 type GetUsecase interface {
-	Get(id string) (error, GetResponse)
+	Get(id string) (error, interface{})
 }
-
-type GetResponse interface{}
 
 type getUsecase struct {
 	repo repository.UserRepository
 }
 
-func (lu getUsecase) Get(id string) (error, GetResponse) {
+func (lu getUsecase) Get(id string) (error, interface{}) {
 	err, lst := lu.repo.Find(id)
 	if err != nil {
 		return err, nil

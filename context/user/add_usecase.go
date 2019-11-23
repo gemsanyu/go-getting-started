@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/mmuflih/go-di-arch/domain/model"
-	"github.com/mmuflih/go-di-arch/domain/repository"
+	"github.com/heroku/go-getting-started/domain/model"
+	"github.com/heroku/go-getting-started/domain/repository"
 )
 
 /**
@@ -13,25 +13,22 @@ import (
 **/
 
 type AddUsecase interface {
-	Add(AddRequest) (error, AddResponse)
+	Add(AddRequest) (error, interface{})
 }
 
 type AddRequest interface {
 	GetName() string
-	GetEmail() string
+	GetUsername() string
 	GetPassword() string
 	GetRole() string
-	GetPhone() string
 }
-
-type AddResponse interface{}
 
 type addUsecase struct {
 	repo repository.UserRepository
 }
 
-func (au addUsecase) Add(req AddRequest) (error, AddResponse) {
-	u := model.NewUser(req.GetEmail(), req.GetName(), req.GetPhone(), req.GetPassword(),
+func (au addUsecase) Add(req AddRequest) (error, interface{}) {
+	u := model.NewUser(req.GetUsername(), req.GetName(), req.GetPassword(),
 		req.GetRole())
 
 	tx, _ := au.repo.DBConn().Begin()

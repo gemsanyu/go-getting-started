@@ -1,4 +1,4 @@
-package: github.com/mmuflih/go-di-arch
+package: github.com/heroku/go-getting-started
 import:
 - package: github.com/mmuflih/go-httplib
   version: master

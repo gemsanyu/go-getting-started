@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/mmuflih/go-di-arch/container/provider"
+	"github.com/heroku/go-getting-started/container/provider"
 	"go.uber.org/dig"
 )
 
